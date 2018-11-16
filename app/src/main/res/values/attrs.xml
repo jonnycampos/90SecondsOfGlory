@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CanvasGame">
+        <attr name="colorBorder" format="integer" />
+        <attr name="colorBackground" format="integer" />
+        <attr name="paddingShape" format="integer" />
+        <attr name="positionCircle" format="string" />
+        <attr name="radiusCircle" format="integer" />
+        <attr name="strokeBorder" format="integer" />
+    </declare-styleable>
+    <declare-styleable name="MiniGameView">
+        <attr name="positionHorizontal" format="string" />
+        <attr name="positionVertical" format="string" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="color_1">
+        <item>azul</item>
+        <item>#87CEFA</item>
+    </array>
+    <array name="color_2">
+        <item>verde</item>
+        <item>#00FF00</item>
+    </array>
+    <array name="color_3">
+        <item>amarillo</item>
+        <item>#FFFF00</item>
+    </array>
+    <array name="color_4">
+        <item>rosa</item>
+        <item>#FF00FF</item>
+    </array>
+    <array name="color_5">
+        <item>pink</item>
+        <item>#FF0000</item>
+    </array>
+</resources>

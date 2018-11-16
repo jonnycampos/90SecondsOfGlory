@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+ >
+
+
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/Black">
+
+
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+<!--        <apps.blessed.a90secondsofglory.view.CanvasGame
+            android:id="@+id/gamea"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/Black"
+            app:colorBorder="@color/LemonChiffon"
+            app:colorBackground="@color/Black"
+            app:paddingShape="50"
+            app:positionCircle="br"
+            app:radiusCircle="200"
+            app:strokeBorder="20"
+            />-->
+<!--        <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/my_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/shape_mini_game"
+        />-->
+
+        <apps.blessed.a90secondsofglory.view.MiniGameView
+            android:id="@+id/my_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/ic_minibackground_si"
+            android:backgroundTint="@color/White"
+            android:scaleType="fitXY"
+            app:positionHorizontal="t"
+            app:positionVertical="l"
+            />
+
+
+        <apps.blessed.a90secondsofglory.view.MiniGameView
+            android:id="@+id/my_image_view2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/ic_minibackground_sd"
+            android:backgroundTint="@color/Aquamarine"
+            android:scaleType="fitXY"
+            app:positionHorizontal="t"
+            app:positionVertical="r"
+            />
+
+
+<!--        <apps.blessed.a90secondsofglory.view.CanvasGame
+            android:id="@+id/gameb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/Black"
+            app:colorBorder="@color/Crimson"
+            app:colorBackground="@color/Black"
+            app:paddingShape="50"
+            app:positionCircle="bl"
+            app:radiusCircle="200"
+            app:strokeBorder="20"/>-->
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+<!--        <apps.blessed.a90secondsofglory.view.CanvasGame
+            android:id="@+id/gamec"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/Black"
+            app:colorBorder="@color/MediumAquamarine"
+            app:colorBackground="@color/Black"
+            app:paddingShape="50"
+            app:positionCircle="tr"
+            app:radiusCircle="200"
+            app:strokeBorder="20"/>
+
+        <apps.blessed.a90secondsofglory.view.CanvasGame
+            android:id="@+id/gamed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/Black"
+            app:colorBorder="@color/LawnGreen"
+            app:colorBackground="@color/Black"
+            app:paddingShape="50"
+            app:positionCircle="tl"
+            app:radiusCircle="200"
+            app:strokeBorder="20"/>-->
+
+        <apps.blessed.a90secondsofglory.view.MiniGameView
+            android:id="@+id/my_image_view3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/ic_minibackground_ii"
+            android:backgroundTint="@color/LawnGreen"
+            android:scaleType="fitXY"
+            app:positionHorizontal="b"
+            app:positionVertical="l"
+            />
+
+
+        <apps.blessed.a90secondsofglory.view.MiniGameView
+            android:id="@+id/my_image_view4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/ic_minibackground_id"
+            android:backgroundTint="@color/Orange"
+            android:scaleType="fitXY"
+            app:positionHorizontal="b"
+            app:positionVertical="r"
+            />
+
+
+
+    </LinearLayout>
+
+</LinearLayout>
+
+<!--
+    <apps.blessed.a90secondsofglory.view.Counter
+        android:id="@+id/counter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
+        android:background="@color/Blue"
+        />
+-->
+
+
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_timer_black_24dp"
+        android:tint="@color/Orange"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
+
+        />
+
+
+</RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".GameActivity" >
+
+<apps.blessed.a90secondsofglory.view.MyTest
+    android:id="@+id/simpleDrawingView1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentTop="true" />
+
+</RelativeLayout>-->
+
+
+
