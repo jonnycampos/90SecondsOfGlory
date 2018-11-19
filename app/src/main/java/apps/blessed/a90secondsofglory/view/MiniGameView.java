@@ -18,14 +18,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
 
-
-import com.easyandroidanimations.library.AnimationListener;
-import com.easyandroidanimations.library.ExplodeAnimation;
 import com.easyandroidanimations.library.FlipHorizontalAnimation;
-import com.easyandroidanimations.library.FoldAnimation;
-import com.easyandroidanimations.library.FoldLayout;
 import com.easyandroidanimations.library.ParallelAnimator;
 import com.easyandroidanimations.library.ParallelAnimatorListener;
 import com.easyandroidanimations.library.ScaleInAnimation;
@@ -68,6 +62,10 @@ public class MiniGameView extends AppCompatImageView {
     private int MIN_SHAPES = 5;
     private int MAX_SHAPES = 20;
 
+    private String state;
+    private String STATE_GAME = "STATE_GAME";
+    private String STATE_SHOW_POINTS = "STATE_SHOW_POINTS";
+
     // defines paint and canvas
     private Paint drawPaint;
 
@@ -107,21 +105,6 @@ public class MiniGameView extends AppCompatImageView {
     //Boolean to check if the game was answered yet or not
     boolean answered;
 
-    public int getColorBorder() {
-        return colorBorder;
-    }
-
-    public void setColorBorder(int colorBorder) {
-        this.colorBorder = colorBorder;
-    }
-
-    public int getColorBackground() {
-        return colorBackground;
-    }
-
-    public void setColorBackground(int colorBackground) {
-        this.colorBackground = colorBackground;
-    }
 
     public int getLeftRelative() {
         return leftRelative;
@@ -159,6 +142,23 @@ public class MiniGameView extends AppCompatImageView {
         return positionHorizontal;
     }
 
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public MiniGameProgressBar getProgressBar() {
+        return progressBar;
+    }
+
+    public void setProgressBar(MiniGameProgressBar progressBar) {
+        this.progressBar = progressBar;
+    }
+
     public void setPositionHorizontal(String positionHorizontal) {
         this.positionHorizontal = positionHorizontal;
     }
@@ -171,23 +171,6 @@ public class MiniGameView extends AppCompatImageView {
         this.positionVertical = positionVertical;
     }
 
-
-
-    public List<MiniGameButton> getButtons() {
-        return buttons;
-    }
-
-    public void setButtons(List<MiniGameButton> buttons) {
-        this.buttons = buttons;
-    }
-
-    public MiniGameProgressBar getProgressBar() {
-        return progressBar;
-    }
-
-    public void setProgressBar(MiniGameProgressBar progressBar) {
-        this.progressBar = progressBar;
-    }
 
     public MiniGameView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -206,6 +189,9 @@ public class MiniGameView extends AppCompatImageView {
 
         //Metrics to return at the end of the minigame
         GameMetric metric = new GameMetric();
+
+        //initial state
+        state = STATE_GAME;
 
         setupPaint();
     }
@@ -487,17 +473,53 @@ public class MiniGameView extends AppCompatImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-       //Top - Question
-       drawQuestion(canvas, question);
+       //State 1 - Draw the game
+        if (state.equals(STATE_GAME)) {
+            //Top - Question
+            drawQuestion(canvas, question);
 
-       //Middle - Body
-       drawBody(canvas);
+            //Middle - Body
+            drawBody(canvas);
 
-       //Bottom - Touchable answers
-       drawButtons(canvas);
+            //Bottom - Touchable answers
+            drawButtons(canvas);
 
-       //Progress bar
-       drawProgressBar(canvas);
+            //Progress bar
+            drawProgressBar(canvas);
+        }
+
+        //State 2 - Draw the points
+       if (state.equals(STATE_SHOW_POINTS)) {
+           drawPoints(canvas);
+       }
+    }
+
+    private void drawPoints(Canvas canvas) {
+        if (metric.isRigthAnswer()) {
+            drawPaint.setColor(Color.GREEN);
+        } else {
+            drawPaint.setColor(Color.RED);
+        }
+        drawPaint.setTextSize(300);
+        drawPaint.setStyle(Paint.Style.FILL);
+        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.oswald);
+        drawPaint.setTypeface(typeface);
+
+        int xPos = (canvas.getWidth() / 2);
+        int yPos = (int) ((canvas.getHeight() / 2) - ((drawPaint.descent() + drawPaint.ascent()) / 2)) ;
+        drawPaint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText(String.valueOf(metric.getPoints()), xPos, yPos, drawPaint);
+
+
+//        if (getPositionVertical().equals("l")) {
+//            drawPaint.setTextAlign(Paint.Align.LEFT);
+//            canvas.drawText(String.valueOf(metric.getPoints()),(getRightRelative() - getLeftRelative()) / 3,
+//                    (getBottomRelative() - getTopRelative()) / 3 ,drawPaint);
+//        } else {
+//            drawPaint.setTextAlign(Paint.Align.RIGHT);
+//            canvas.drawText(String.valueOf(metric.getPoints()),(getRightRelative() - getLeftRelative()) / 3,
+//                    (getBottomRelative() - getTopRelative()) / 3 ,drawPaint);
+//        }
     }
 
 
@@ -562,7 +584,11 @@ public class MiniGameView extends AppCompatImageView {
         }
     }
 
-
+    /**
+     * When the button is touched
+     * @param event
+     * @return
+     */
     public boolean onTouchEvent(MotionEvent event) {
 
         int eventAction = event.getAction();
@@ -604,14 +630,22 @@ public class MiniGameView extends AppCompatImageView {
         return true;
     }
 
-
+    /**
+     * It will restart the minigame from scratch:
+     * - Close the old minigame, calculating points
+     * - Stop chrono
+     * - Calculate points
+     * - Add global metrics and update global scoring
+     * - Animation to clear current game
+     * - TODO - Animation to show points earned
+     * - Start up a new game
+     */
     public void restartView(){
         //Closing the execution before starting up again
         timer.cancel();
-        metric.setPoints(calculatePoints(metric));
+        metric.setPoints(UtilResources.calculatePoints(metric,getContext()));
         FullGameState.getInstance().addMetric(metric);
         FullGameState.getInstance().addPoints(metric.getPoints());
-
 
 
         //Bye bye
@@ -625,10 +659,7 @@ public class MiniGameView extends AppCompatImageView {
         parallelAnimator.setListener(new ParallelAnimatorListener() {
             @Override
             public void onAnimationEnd(ParallelAnimator animation) {
-                view.setVisibility(View.GONE);
-                invalidate();
-                setupPaint();
-                view.setVisibility(View.VISIBLE);
+
             }
         });
         parallelAnimator.animate();
@@ -664,38 +695,33 @@ public class MiniGameView extends AppCompatImageView {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                view.setVisibility(View.GONE);
-                invalidate();
-                setupPaint();
-                view.setVisibility(View.VISIBLE);
+
             }
 
         });
 
         //this.startAnimation(explodeAnimation);
-    }
+        switchToShowPointsState();
 
+    }
 
     /**
-     * Points calculation for a given game
-     * @param metric Values like speed, right or wrong...
-     * @return Number of points: It may be negative
+     * Switch from game to the screen showing the points earned
      */
-    private int calculatePoints(GameMetric metric) {
-        if (!metric.isAnswered()) {
-            //Return a fix value
-        }
+    private void switchToShowPointsState() {
+        //Clear screen
+        state = STATE_SHOW_POINTS;
+        this.invalidate();
 
-        //If it was answered
-        if (!metric.isRigthAnswer()) {
-            //Return a fix value
-        }
-
-        //If it was answered right: two variables. Speed and difficulty
-
-
+        //Start a new countdown
+        ShowPointsCountDownTimer countDownTimer = new ShowPointsCountDownTimer(3000,1,this);
+        countDownTimer.start();
 
     }
+
+
+
+
 
     public class MiniGameCountDownTimer extends CountDownTimer {
 
@@ -720,6 +746,31 @@ public class MiniGameView extends AppCompatImageView {
         public void onTick(long millisUntilFinished) {
             millisecs ++;
 
+        }
+    }
+
+
+    public class ShowPointsCountDownTimer extends CountDownTimer {
+
+        MiniGameView view;
+
+        public ShowPointsCountDownTimer(long millisInFuture, long countDownInterval, MiniGameView view) {
+            super(millisInFuture, countDownInterval);
+            this.view = view;
+
+        }
+
+        @Override
+        public void onFinish() {
+            state = STATE_GAME;
+            view.setVisibility(View.GONE);
+            view.invalidate();
+            setupPaint();
+            view.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
         }
     }
 }
