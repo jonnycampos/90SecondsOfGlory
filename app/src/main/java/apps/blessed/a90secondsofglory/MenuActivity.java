@@ -31,7 +31,6 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(MenuActivity.this, GameActivity.class);
-                myIntent.putExtra("key", "Hola"); //Optional parameters
                 MenuActivity.this.startActivity(myIntent);
             }
         });

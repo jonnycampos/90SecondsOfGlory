@@ -1,6 +1,7 @@
 package apps.blessed.a90secondsofglory;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,8 +10,9 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
 import apps.blessed.a90secondsofglory.view.CanvasGame;
+import apps.blessed.a90secondsofglory.view.Counter;
 
-public class GameActivity extends Activity {
+public class GameActivity extends Activity implements GameEventsListener{
 
    // CanvasGame gameA;
     CanvasGame gameB;
@@ -22,15 +24,14 @@ public class GameActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-     //   gameA = (CanvasGame) findViewById(R.id.gamea);
-        //gameB = (CanvasGame) findViewById(R.id.gameb);
-        //gameC = (CanvasGame) findViewById(R.id.gamec);
-        //gameD = (CanvasGame) findViewById(R.id.gamed);
+        Counter counter = findViewById(R.id.counter);
+        counter.setGameEventsListener(this);
 
-        AlphaAnimation anim = new AlphaAnimation(1.0f, 0.0f);
-        anim.setDuration(1000);
-        anim.setRepeatCount(5);
-        anim.setRepeatMode(Animation.REVERSE);
-        //gameB.startAnimation(anim);
+    }
+
+    @Override
+    public void onTimeEnds() {
+        Intent myIntent = new Intent(GameActivity.this, ResultActivity.class);
+        GameActivity.this.startActivity(myIntent);
     }
 }

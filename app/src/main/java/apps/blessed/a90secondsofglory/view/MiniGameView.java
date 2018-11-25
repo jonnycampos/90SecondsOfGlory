@@ -248,6 +248,8 @@ public class MiniGameView extends AppCompatImageView {
         if (questionWithColor) {
             colorQuestion = colorList.get((randomFigure.nextInt(colorList.size())));
             question = question + " color " + colorQuestion.getName();
+        } else {
+            colorQuestion = null;
         }
         metric.setColorInTheQuestion(questionWithColor);
     }
@@ -590,43 +592,43 @@ public class MiniGameView extends AppCompatImageView {
      * @return
      */
     public boolean onTouchEvent(MotionEvent event) {
+        if (state == STATE_GAME) {
+            int eventAction = event.getAction();
 
-        int eventAction = event.getAction();
+            int x = (int) event.getX();
+            int y = (int) event.getY();
 
-        int x = (int) event.getX();
-        int y = (int) event.getY();
+            int pressedButton = -1;
+            switch (eventAction) {
 
-        int pressedButton = -1;
-        switch (eventAction) {
-
-            case MotionEvent.ACTION_DOWN:
-                metric.setAnswered(true);
-                metric.setMilliSecs(millisecs);
-                //Pressed button 1
-                if (buttons.get(0).getRectangle().contains(x,y)) {
-                    pressedButton = 0;
-                } else if (buttons.get(1).getRectangle().contains(x,y)) {
-                    pressedButton = 1;
-                } else if (buttons.get(2).getRectangle().contains(x,y)) {
-                    pressedButton = 2;
-                }
-                if (pressedButton != -1) {
-                    //Check the correct answer
-                    if (Integer.parseInt(buttons.get(pressedButton).getText()) == correctAnswer) {
-                        //If correct: Calculate points.Add points
-                        this.restartView();
-                        metric.setRigthAnswer(true);
-
-                    } else {
-                        //If false: Calculate negative points. Add points
-                        this.restartView();
-                        metric.setRigthAnswer(false);
+                case MotionEvent.ACTION_DOWN:
+                    metric.setAnswered(true);
+                    metric.setMilliSecs(millisecs);
+                    //Pressed button 1
+                    if (buttons.get(0).getRectangle().contains(x, y)) {
+                        pressedButton = 0;
+                    } else if (buttons.get(1).getRectangle().contains(x, y)) {
+                        pressedButton = 1;
+                    } else if (buttons.get(2).getRectangle().contains(x, y)) {
+                        pressedButton = 2;
                     }
-                    //End instance and create a new one
-                }
-                break;
-            }
+                    if (pressedButton != -1) {
+                        //Check the correct answer
+                        if (Integer.parseInt(buttons.get(pressedButton).getText()) == correctAnswer) {
+                            //If correct: Calculate points.Add points
+                            metric.setRigthAnswer(true);
+                            this.restartView();
 
+                        } else {
+                            //If false: Calculate negative points. Add points
+                            metric.setRigthAnswer(false);
+                            this.restartView();
+                        }
+                        //End instance and create a new one
+                    }
+                    break;
+            }
+        }
         return true;
     }
 
@@ -637,7 +639,7 @@ public class MiniGameView extends AppCompatImageView {
      * - Calculate points
      * - Add global metrics and update global scoring
      * - Animation to clear current game
-     * - TODO - Animation to show points earned
+     * - Animation to show points earned
      * - Start up a new game
      */
     public void restartView(){

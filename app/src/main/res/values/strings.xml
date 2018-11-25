@@ -2,4 +2,5 @@
     <string name="app_name">90 Seconds Of Glory</string>
     <string name="menuStartText">Start</string>
     <string name="menuTitleText">90 Seconds of Glory</string>
+    <string name="resultTitleText">Puntos Totales</string>
 </resources>

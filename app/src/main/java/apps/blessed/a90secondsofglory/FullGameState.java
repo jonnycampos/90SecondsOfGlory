@@ -31,6 +31,7 @@ public class FullGameState {
 
 
     public void addPoints(int newPoints) {
+
         points += newPoints;
     }
 
