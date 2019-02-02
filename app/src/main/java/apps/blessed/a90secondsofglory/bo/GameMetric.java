@@ -13,6 +13,7 @@ public class GameMetric {
     private boolean colorInTheQuestion;
     public int points;
 
+
     public GameMetric() {
     }
 
@@ -71,6 +72,8 @@ public class GameMetric {
     public void setPoints(int points) {
         this.points = points;
     }
+
+
 
 
 }

@@ -13,6 +13,9 @@ public class FullGameState {
 
     private int points;
     private List<GameMetric> gameMetricList;
+    public String name;
+    public String province;
+    public String date;
 
     private static final FullGameState ourInstance = new FullGameState();
 
@@ -41,5 +44,21 @@ public class FullGameState {
 
     public List<GameMetric> getGameMetricList() {
         return gameMetricList;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
     }
 }

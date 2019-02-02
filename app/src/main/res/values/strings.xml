@@ -3,4 +3,5 @@
     <string name="menuStartText">Start</string>
     <string name="menuTitleText">90 Seconds of Glory</string>
     <string name="resultTitleText">Puntos Totales</string>
+    <string name="title_activity_classif">ClassifActivity</string>
 </resources>
