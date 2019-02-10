@@ -16,6 +16,7 @@ public class FullGameState {
     public String name;
     public String province;
     public String date;
+    public int position;
 
     private static final FullGameState ourInstance = new FullGameState();
 
@@ -60,5 +61,13 @@ public class FullGameState {
 
     public void setProvince(String province) {
         this.province = province;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

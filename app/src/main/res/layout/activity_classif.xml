@@ -2,53 +2,49 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
     android:orientation="vertical"
-    android:background="@color/Black">
+    android:background="@color/Black"
+    android:paddingLeft="150dp"
+    android:paddingRight="150dp">
 
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/classif_province"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="15dip"
+        android:text=""
+        android:textColor="@color/White"
+        android:textSize="32dp"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/classif_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="2"
-        >
+        android:gravity="center_horizontal"
+        android:divider="#FFCC00"
+        android:dividerHeight="4px"/>
 
-        <TextView
-            android:id="@+id/menu_text_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="center_horizontal"
-            android:text="@string/menuTitleText"
-            android:textColor="@color/DarkMagenta"
-            android:textSize="40dp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="3">
-
-        <TextView
-            android:id="@+id/menu_text_start"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="center_horizontal"
-            android:paddingTop="20sp"
-            android:text="@string/menuStartText"
-            android:textColor="@color/DeepPink"
-            android:textSize="32dp"
-            android:textStyle="bold"
-            android:onClick="onClick"
-            android:clickable="true"/>/>
-    </LinearLayout>
-
+    <Button
+        android:id="@+id/button_result"
+        android:text="Jugar Otra Vez"
+        android:textColor="#000000"
+        android:textSize="22sp"
+        android:typeface="monospace"
+        android:textAllCaps="false"
+        android:layout_width="250dp"
+        android:layout_height="43dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_gravity="center"
+        android:background="@drawable/button_result"
+        android:shadowColor="#FFFFFF"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+        />
 
 </LinearLayout>

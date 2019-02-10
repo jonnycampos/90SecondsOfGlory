@@ -154,9 +154,7 @@ public class ResultActivity extends Activity {
 
             @Override
             protected void onPostExecute(ResponseClass result) {
-                if (result == null) {
-                    return;
-                }
+                FullGameState.getInstance().setPosition(result.getPosition());
             }
         }.execute(request);
     }

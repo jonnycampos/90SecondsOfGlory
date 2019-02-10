@@ -10,4 +10,8 @@ public interface LambdaInterface {
      */
     @LambdaFunction
     ResponseClass game_metric(RequestClass request);
+
+
+    @LambdaFunction
+    ResponseMetricsByProvince getMetricByProvince(RequestMetricsByProvince request);
 }
