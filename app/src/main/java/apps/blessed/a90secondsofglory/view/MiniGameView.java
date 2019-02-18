@@ -36,6 +36,7 @@ import apps.blessed.a90secondsofglory.bo.GameMetric;
 import apps.blessed.a90secondsofglory.bo.ShapeGame;
 import apps.blessed.a90secondsofglory.shape.MiniGameButton;
 import apps.blessed.a90secondsofglory.shape.MiniGameProgressBar;
+import apps.blessed.a90secondsofglory.sound.SoundPoolPlayer;
 import apps.blessed.a90secondsofglory.utils.UtilResources;
 
 
@@ -617,6 +618,9 @@ public class MiniGameView extends AppCompatImageView {
                         if (Integer.parseInt(buttons.get(pressedButton).getText()) == correctAnswer) {
                             //If correct: Calculate points.Add points
                             metric.setRigthAnswer(true);
+                            SoundPoolPlayer sound = new SoundPoolPlayer(getContext().getApplicationContext());
+                            sound.playShortResource(R.raw.ok);
+                            //sound.release();
                             this.restartView();
 
                         } else {

@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,6 +24,7 @@ import apps.blessed.a90secondsofglory.lambda.LambdaInterface;
 import apps.blessed.a90secondsofglory.lambda.RequestMetricsByProvince;
 import apps.blessed.a90secondsofglory.lambda.ResponseMetricByProvince;
 import apps.blessed.a90secondsofglory.lambda.ResponseMetricsByProvince;
+import apps.blessed.a90secondsofglory.view.CustomListView;
 
 /**
  * Created by jacam on 25/11/2018.
@@ -30,7 +34,7 @@ public class ClassifActivity extends Activity {
 
     private String province;
     ResponseMetricsByProvince listOfPlayers;
-    ListView listView;
+    CustomListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,5 +120,7 @@ public class ClassifActivity extends Activity {
             }
         }.execute(request);
     }
+
+
 
 }

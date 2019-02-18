@@ -1,54 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
+    android:background="@color/Black"
     android:orientation="vertical"
-    android:background="@color/Black">
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
+    android:paddingTop="30dp"
+    android:layout_gravity="center_horizontal|center_vertical"
+    android:layout_centerVertical="true">
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="2"
-        >
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_weight="1"
+
+      >
+
+        <ImageView
+            android:id="@+id/menu_image_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="@color/LightSalmon"
+            app:srcCompat="@drawable/ic_clock_top"
+        />
 
         <TextView
-            android:id="@+id/menu_text_title"
-            android:layout_width="match_parent"
+            android:id="@+id/menu_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
-            android:gravity="center_horizontal"
-            android:text="@string/menuTitleText"
-            android:textColor="@color/DarkMagenta"
-            android:textSize="40dp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="3">
-
-        <TextView
-            android:id="@+id/menu_text_start"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="center_horizontal"
-            android:paddingTop="20sp"
-            android:text="@string/menuStartText"
-            android:textColor="@color/DeepPink"
+            android:gravity="center"
+            android:text="90SECS"
+            android:textColor="@color/White"
             android:textSize="32dp"
             android:textStyle="bold"
-            android:onClick="onClick"
-            android:clickable="true"/>/>
-    </LinearLayout>
+            android:layout_below="@+id/menu_image_top"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            />
+
+
+
+        <ImageView
+            android:id="@+id/menu_image_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="@color/LightSalmon"
+            app:srcCompat="@drawable/ic_clock_bottom"
+            android:layout_below="@+id/menu_title"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_centerVertical="true"
+        />
+
+        <Button
+            android:id="@+id/button_menu"
+            android:text="Jugar"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-condensed"
+            android:textAllCaps="true"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_gravity="center"
+            android:background="@drawable/button_result"
+            android:shadowColor="#FFFFFF"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/menu_title"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+
+            />
+
+
+
+    </RelativeLayout>
+
 
 
 </LinearLayout>

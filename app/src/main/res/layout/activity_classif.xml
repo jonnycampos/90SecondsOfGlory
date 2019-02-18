@@ -18,26 +18,31 @@
         android:text=""
         android:textColor="@color/White"
         android:textSize="32dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"/>
 
-    <ListView
+    <apps.blessed.a90secondsofglory.view.CustomListView
         android:id="@+id/classif_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:gravity="center_horizontal"
         android:divider="#FFCC00"
-        android:dividerHeight="4px"/>
+        android:dividerHeight="4px"
+        android:background="@drawable/border_classif"
+        android:paddingBottom="5dp"
+        />
 
     <Button
         android:id="@+id/button_result"
         android:text="Jugar Otra Vez"
         android:textColor="#000000"
-        android:textSize="22sp"
-        android:typeface="monospace"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:typeface="serif"
         android:textAllCaps="false"
-        android:layout_width="250dp"
-        android:layout_height="43dp"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
         android:gravity="center_horizontal|center_vertical"
         android:layout_gravity="center"
         android:background="@drawable/button_result"
@@ -45,6 +50,7 @@
         android:shadowDx="0"
         android:shadowDy="0"
         android:shadowRadius="5"
+        android:layout_marginTop="5dp"
         />
 
 </LinearLayout>

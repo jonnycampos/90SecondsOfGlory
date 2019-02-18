@@ -98,7 +98,6 @@ public class ResultActivity extends Activity {
                 } else {
                     FullGameState.getInstance().setName(name);
                     FullGameState.getInstance().setProvince(province);
-                    //TODO Send metrics to server
                     sendMetrics();
 
                     //New Activity
@@ -131,6 +130,7 @@ public class ResultActivity extends Activity {
         request.setName(FullGameState.getInstance().getName());
         request.setProvince(FullGameState.getInstance().getProvince());
         request.setPoints(FullGameState.getInstance().getPoints());
+        request.setMetricIndex(buildMetricIndex(request.getPoints(), request.getName()));
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         request.setDate(formatter.format(date));
@@ -157,6 +157,10 @@ public class ResultActivity extends Activity {
                 FullGameState.getInstance().setPosition(result.getPosition());
             }
         }.execute(request);
+    }
+
+    private String buildMetricIndex(int points, String name) {
+        return String.format("%05d", points) + "-" + name;
     }
 
 

@@ -11,6 +11,7 @@ public class RequestClass {
     String province;
     int points;
     String date;
+    String metricIndex;
     GameMetric[] gameMetrics;
 
     public String getName() {
@@ -51,5 +52,13 @@ public class RequestClass {
 
     public void setGameMetrics(GameMetric[] gameMetrics) {
         this.gameMetrics = gameMetrics;
+    }
+
+    public String getMetricIndex() {
+        return metricIndex;
+    }
+
+    public void setMetricIndex(String metricIndex) {
+        this.metricIndex = metricIndex;
     }
 }
