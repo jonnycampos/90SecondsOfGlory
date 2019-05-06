@@ -11,7 +11,9 @@ public class GameMetric {
     private int numberOfShapes;
     private int numberOfColors;
     private boolean colorInTheQuestion;
-    public int points;
+    private int points;
+    private int shapesTotal;
+    private int shapesAnswer;
 
 
     public GameMetric() {
@@ -73,7 +75,19 @@ public class GameMetric {
         this.points = points;
     }
 
+    public int getShapesTotal() {
+        return shapesTotal;
+    }
 
+    public void setShapesTotal(int shapesTotal) {
+        this.shapesTotal = shapesTotal;
+    }
 
+    public int getShapesAnswer() {
+        return shapesAnswer;
+    }
 
+    public void setShapesAnswer(int shapesAnswer) {
+        this.shapesAnswer = shapesAnswer;
+    }
 }

@@ -1,67 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="pointsWrongAnswer">-100</integer>
+    <integer name="pointsWrongAnswer">-50</integer>
     <integer name="pointsNoAnswer">-50</integer>
     <array name="interval_0">
+        <item>0-10</item>
         <item>0-2</item>
-        <item>0-5</item>
-        <item>100</item>
+        <item>50</item>
     </array>
     <array name="interval_1">
-        <item>0-2</item>
-        <item>5-10</item>
-        <item>150</item>
-    </array>
-    <array name="interval_2">
-        <item>0-2</item>
-        <item>10-15</item>
-        <item>200</item>
-    </array>
-    <array name="interval_3">
-        <item>0-2</item>
-        <item>15-40</item>
-        <item>200</item>
-    </array>
-
-    <array name="interval_4">
+        <item>0-10</item>
         <item>2-5</item>
-        <item>0-5</item>
-        <item>50</item>
-    </array>
-    <array name="interval_5">
-        <item>2-5</item>
-        <item>5-10</item>
-        <item>70</item>
-    </array>
-    <array name="interval_6">
-        <item>2-5</item>
-        <item>10-15</item>
-        <item>100</item>
-    </array>
-    <array name="interval_7">
-        <item>2-5</item>
-        <item>15-40</item>
-        <item>150</item>
-    </array>
-
-    <array name="interval_8">
-        <item>5-10</item>
-        <item>0-5</item>
-        <item>20</item>
-    </array>
-    <array name="interval_9">
-        <item>5-10</item>
-        <item>5-10</item>
-        <item>50</item>
-    </array>
-    <array name="interval_10">
-        <item>5-10</item>
-        <item>10-15</item>
         <item>80</item>
     </array>
-    <array name="interval_11">
-        <item>5-10</item>
-        <item>15-40</item>
-        <item>130</item>
+    <array name="interval_2">
+        <item>0-10</item>
+        <item>5-8</item>
+        <item>120</item>
     </array>
+    <array name="interval_3">
+        <item>0-10</item>
+        <item>8-12</item>
+        <item>170</item>
+    </array>
+    <array name="interval_4">
+        <item>0-10</item>
+        <item>12-20</item>
+        <item>250</item>
+    </array>
+
 </resources>

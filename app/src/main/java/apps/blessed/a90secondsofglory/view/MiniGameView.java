@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -36,7 +37,7 @@ import apps.blessed.a90secondsofglory.bo.GameMetric;
 import apps.blessed.a90secondsofglory.bo.ShapeGame;
 import apps.blessed.a90secondsofglory.shape.MiniGameButton;
 import apps.blessed.a90secondsofglory.shape.MiniGameProgressBar;
-import apps.blessed.a90secondsofglory.sound.SoundPoolPlayer;
+import apps.blessed.a90secondsofglory.sound.MediaPlayerUtils;
 import apps.blessed.a90secondsofglory.utils.UtilResources;
 
 
@@ -48,8 +49,6 @@ import apps.blessed.a90secondsofglory.utils.UtilResources;
 public class MiniGameView extends AppCompatImageView {
 
 
-    private int colorBorder;
-    private int colorBackground;
 
 
     private int leftRelative;
@@ -59,9 +58,6 @@ public class MiniGameView extends AppCompatImageView {
 
     private String positionHorizontal;
     private String positionVertical;
-
-    private int MIN_SHAPES = 5;
-    private int MAX_SHAPES = 20;
 
     private String state;
     private String STATE_GAME = "STATE_GAME";
@@ -101,10 +97,10 @@ public class MiniGameView extends AppCompatImageView {
     GameMetric metric;
 
     //Time the minigame is running
-    int millisecs;
+    private int millisecs;
 
     //Boolean to check if the game was answered yet or not
-    boolean answered;
+    private boolean answered;
 
 
     public int getLeftRelative() {
@@ -172,6 +168,13 @@ public class MiniGameView extends AppCompatImageView {
         this.positionVertical = positionVertical;
     }
 
+    public boolean isAnswered() {
+        return answered;
+    }
+
+    public void setAnswered(boolean answered) {
+        this.answered = answered;
+    }
 
     public MiniGameView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -194,6 +197,26 @@ public class MiniGameView extends AppCompatImageView {
         //initial state
         state = STATE_GAME;
 
+        Drawable d = null;
+        if (getPositionHorizontal().equals("t")) {
+            if (getPositionVertical().equals("l")){
+                d = AppCompatResources.getDrawable(context, R.drawable.ic_minibackground_si);
+                DrawableCompat.setTint(d, Color.WHITE);
+            }else{
+                d = AppCompatResources.getDrawable(context, R.drawable.ic_minibackground_sd);
+                DrawableCompat.setTint(d, Color.CYAN);
+            }
+        } else {
+            if (getPositionVertical().equals("l")){
+                d = AppCompatResources.getDrawable(context, R.drawable.ic_minibackground_ii);
+                DrawableCompat.setTint(d, Color.GREEN);
+            }else{
+                d = AppCompatResources.getDrawable(context, R.drawable.ic_minibackground_id);
+                DrawableCompat.setTint(d, Color.YELLOW);
+            }
+        }
+
+        this.setBackground(d);
         setupPaint();
     }
 
@@ -202,9 +225,11 @@ public class MiniGameView extends AppCompatImageView {
         drawPaint = new Paint();
         drawPaint.setAntiAlias(true);
 
+
         answered = false;
         metric = new GameMetric();
 
+        millisecs = 0;
 
         //Generate game type
         generateGameValues();
@@ -219,10 +244,16 @@ public class MiniGameView extends AppCompatImageView {
         progressBar = createProgressBar();
 
         //Start timer
-        timer = new MiniGameCountDownTimer(8500,1, this);
-        timer.start();
+        if (FullGameState.getInstance().isPlayingGame()) {
+            timer = new MiniGameCountDownTimer(8500, 1, this, getContext());
+            timer.start();
+        }
 
 
+    }
+
+    public void addMillisec() {
+        millisecs++;
     }
 
     private void generateGameValues() {
@@ -365,12 +396,25 @@ public class MiniGameView extends AppCompatImageView {
     }
 
 
-
+    /**
+     * Decides about the value of the button
+     * @param i Index of the button (1,2,3)
+     * @param winnerButtonIndex The index of the button with the answer
+     * @param correctAnswer The correct answer
+     * @param otherAnswer Other answer calculated (if any, otherwise is a null)
+     * @return The answer of the value
+     */
     private String buttonAnswer(int i, int winnerButtonIndex, int correctAnswer, Integer otherAnswer) {
+        //No need to calculate anything
         if (i == winnerButtonIndex)
             return String.valueOf(correctAnswer);
 
+
+        //If we need to add another value (second calculation)
         if (otherAnswer == null) {
+            if (correctAnswer == 0) {
+                return String.valueOf(1);
+            }
             boolean greaterThanCorrectAnswer = new Random().nextBoolean();
             if (greaterThanCorrectAnswer)
                 return String.valueOf(correctAnswer + 1);
@@ -378,6 +422,11 @@ public class MiniGameView extends AppCompatImageView {
                 return String.valueOf(correctAnswer - 1);
         }
 
+
+        //Last button calculation
+        if (correctAnswer == 0) {
+            return String.valueOf(2);
+        }
         if (otherAnswer.intValue() > correctAnswer)
             return String.valueOf(correctAnswer - 1);
         else
@@ -394,7 +443,7 @@ public class MiniGameView extends AppCompatImageView {
         int positionRightBody;
         int positionTopBody;
         int positionBottomBody;
-        int sizeShape = 50;
+        int sizeShape = UtilResources.getRealSize(getContext().getResources().getInteger(R.integer.mg_sizeShape),getResources().getDisplayMetrics());
         correctAnswer = 0;
         ArrayList<Drawable> list = new ArrayList<Drawable>();
         if (getPositionVertical().equals("l")) {
@@ -416,7 +465,10 @@ public class MiniGameView extends AppCompatImageView {
         Random randomColor = new Random();
         Random randomShape = new Random();
         //Calculate num of shapes to draw
-        int numShapes = new Random().nextInt(MAX_SHAPES - MIN_SHAPES) + MIN_SHAPES;
+        int maxShapes = getContext().getResources().getInteger(R.integer.mg_maxShapes);
+        int minShapes = getContext().getResources().getInteger(R.integer.mg_minShapes);
+
+        int numShapes = new Random().nextInt(maxShapes - minShapes) + maxShapes;
         int i = 0;
         while (i < numShapes) {
             //Where the shape will be located
@@ -427,7 +479,7 @@ public class MiniGameView extends AppCompatImageView {
             if (!shapeOverlapped(x,y,list,sizeShape)) {
                 int shapeIndex = randomShape.nextInt(shapeList.size());
                 ShapeGame shape = shapeList.get(shapeIndex);
-                Drawable d = getResources().getDrawable(shape.getResource());
+                Drawable d = AppCompatResources.getDrawable(getContext().getApplicationContext(), shape.getResource());
                 int colorIndex = randomColor.nextInt(colorList.size());
                 ColorGame color = colorList.get(colorIndex);
                 DrawableCompat.setTint(d, color.getColorCode());
@@ -443,7 +495,8 @@ public class MiniGameView extends AppCompatImageView {
                 }
             }
         }
-
+        metric.setShapesAnswer(correctAnswer);
+        metric.setShapesTotal(numShapes);
         return list;
 
     }
@@ -505,7 +558,7 @@ public class MiniGameView extends AppCompatImageView {
         }
         drawPaint.setTextSize(300);
         drawPaint.setStyle(Paint.Style.FILL);
-        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.oswald);
+        Typeface typeface = ResourcesCompat.getFont(getContext().getApplicationContext(), R.font.oswald);
         drawPaint.setTypeface(typeface);
 
         int xPos = (canvas.getWidth() / 2);
@@ -514,15 +567,6 @@ public class MiniGameView extends AppCompatImageView {
         canvas.drawText(String.valueOf(metric.getPoints()), xPos, yPos, drawPaint);
 
 
-//        if (getPositionVertical().equals("l")) {
-//            drawPaint.setTextAlign(Paint.Align.LEFT);
-//            canvas.drawText(String.valueOf(metric.getPoints()),(getRightRelative() - getLeftRelative()) / 3,
-//                    (getBottomRelative() - getTopRelative()) / 3 ,drawPaint);
-//        } else {
-//            drawPaint.setTextAlign(Paint.Align.RIGHT);
-//            canvas.drawText(String.valueOf(metric.getPoints()),(getRightRelative() - getLeftRelative()) / 3,
-//                    (getBottomRelative() - getTopRelative()) / 3 ,drawPaint);
-//        }
     }
 
 
@@ -574,16 +618,21 @@ public class MiniGameView extends AppCompatImageView {
      */
     private void drawQuestion(Canvas canvas, String question) {
         drawPaint.setColor(Color.WHITE);
-        drawPaint.setTextSize(50);
+        drawPaint.setTextSize(UtilResources.getRealSize(getContext().getResources().getInteger(R.integer.mg_titleSize),getResources().getDisplayMetrics()));
         drawPaint.setStyle(Paint.Style.FILL);
-        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.oswald);
+        Typeface typeface = ResourcesCompat.getFont(getContext().getApplicationContext(), R.font.oswald);
         drawPaint.setTypeface(typeface);
+        Integer verticalSeparation = getContext().getResources().getInteger(R.integer.mg_titleVerticalRelativePosistion);
+        Integer horizontalSeparation = getContext().getResources().getInteger(R.integer.mg_titleHorizontalRelativePosistion);
         if (getPositionVertical().equals("l")) {
             drawPaint.setTextAlign(Paint.Align.LEFT);
-            canvas.drawText(question,getLeftRelative() + 50,getTopRelative() + 80,drawPaint);
+            canvas.drawText(question,getLeftRelative() +
+                    UtilResources.getRealSize(horizontalSeparation,getResources().getDisplayMetrics()),
+                    getTopRelative() + UtilResources.getRealSize(verticalSeparation,getResources().getDisplayMetrics()),drawPaint);
         } else {
             drawPaint.setTextAlign(Paint.Align.RIGHT);
-            canvas.drawText(question,getRightRelative() - 50,getTopRelative() + 80,drawPaint);
+            canvas.drawText(question,getRightRelative() - UtilResources.getRealSize(horizontalSeparation,getResources().getDisplayMetrics()),
+                    getTopRelative() + UtilResources.getRealSize(verticalSeparation,getResources().getDisplayMetrics()),drawPaint);
         }
     }
 
@@ -618,14 +667,13 @@ public class MiniGameView extends AppCompatImageView {
                         if (Integer.parseInt(buttons.get(pressedButton).getText()) == correctAnswer) {
                             //If correct: Calculate points.Add points
                             metric.setRigthAnswer(true);
-                            SoundPoolPlayer sound = new SoundPoolPlayer(getContext().getApplicationContext());
-                            sound.playShortResource(R.raw.ok);
-                            //sound.release();
+                            MediaPlayerUtils.playSound(getContext().getApplicationContext(), R.raw.ok);
                             this.restartView();
 
                         } else {
                             //If false: Calculate negative points. Add points
                             metric.setRigthAnswer(false);
+                            MediaPlayerUtils.playSound(getContext().getApplicationContext(), R.raw.wrong);
                             this.restartView();
                         }
                         //End instance and create a new one
@@ -649,7 +697,7 @@ public class MiniGameView extends AppCompatImageView {
     public void restartView(){
         //Closing the execution before starting up again
         timer.cancel();
-        metric.setPoints(UtilResources.calculatePoints(metric,getContext()));
+        metric.setPoints(UtilResources.calculatePoints(metric,getContext().getApplicationContext()));
         FullGameState.getInstance().addMetric(metric);
         FullGameState.getInstance().addPoints(metric.getPoints());
 
@@ -671,24 +719,7 @@ public class MiniGameView extends AppCompatImageView {
         parallelAnimator.animate();
 
 
-//        FoldAnimation foldAnimation = new FoldAnimation(view)
-//                .setInterpolator(new DecelerateInterpolator())
-//                .setDuration(500)
-//                .setNumOfFolds(7)
-//                .setOrientation(FoldLayout.Orientation.VERTICAL)
-//                .setListener(new AnimationListener() {
-//                    @Override
-//                    public void onAnimationEnd(com.easyandroidanimations.library.Animation animation) {
-//                        view.setVisibility(View.GONE);
-//                        invalidate();
-//                        setupPaint();
-//                        view.setVisibility(View.VISIBLE);
-//                    }
-//                });
-//        foldAnimation.animate();
-
-
-        Animation startFadeOutAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out_anim);
+        Animation startFadeOutAnimation = AnimationUtils.loadAnimation(getContext().getApplicationContext(), R.anim.fade_out_anim);
         startFadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
 
             @Override
@@ -703,7 +734,6 @@ public class MiniGameView extends AppCompatImageView {
             public void onAnimationEnd(Animation animation) {
 
             }
-
         });
 
         //this.startAnimation(explodeAnimation);
@@ -720,40 +750,19 @@ public class MiniGameView extends AppCompatImageView {
         this.invalidate();
 
         //Start a new countdown
-        ShowPointsCountDownTimer countDownTimer = new ShowPointsCountDownTimer(3000,1,this);
-        countDownTimer.start();
+        ShowPointsCountDownTimer showPointsCountDownTimer = new ShowPointsCountDownTimer(3000,1,this);
+        showPointsCountDownTimer.start();
 
     }
 
 
-
-
-
-    public class MiniGameCountDownTimer extends CountDownTimer {
-
-        MiniGameView view;
-
-        public MiniGameCountDownTimer(long millisInFuture, long countDownInterval, MiniGameView view) {
-            super(millisInFuture, countDownInterval);
-            this.view = view;
-
-        }
-
-        @Override
-        public void onFinish() {
-            //Bye bye
-            if (!answered) {
-                view.restartView();
-            }
-
-        }
-
-        @Override
-        public void onTick(long millisUntilFinished) {
-            millisecs ++;
-
-        }
+    /**
+     * Stop the processing of the game
+     */
+    public void stopAndRelease() {
+        timer.cancel();
     }
+
 
 
     public class ShowPointsCountDownTimer extends CountDownTimer {
@@ -763,16 +772,16 @@ public class MiniGameView extends AppCompatImageView {
         public ShowPointsCountDownTimer(long millisInFuture, long countDownInterval, MiniGameView view) {
             super(millisInFuture, countDownInterval);
             this.view = view;
-
         }
 
         @Override
         public void onFinish() {
-            state = STATE_GAME;
-            view.setVisibility(View.GONE);
-            view.invalidate();
-            setupPaint();
-            view.setVisibility(View.VISIBLE);
+            if (FullGameState.getInstance().isPlayingGame()) {
+                state = STATE_GAME;
+                view.setVisibility(View.GONE);
+                setupPaint();
+                view.setVisibility(View.VISIBLE);
+            }
         }
 
         @Override

@@ -2,6 +2,8 @@ package apps.blessed.a90secondsofglory.utils;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ public final class UtilResources {
      * @param context Current context
      * @return List of shapes/figures
      */
+    @SuppressWarnings("ResourceType")
     public static List<ShapeGame> getGameShapes(Context context) {
 
         List<ShapeGame> array = new ArrayList<ShapeGame>();
@@ -67,6 +70,7 @@ public final class UtilResources {
      * @param context Current context
      * @return List of colors
      */
+    @SuppressWarnings("ResourceType")
     public static List<ColorGame> getGameColors(Context context) {
 
         List<ColorGame> array = new ArrayList<ColorGame>();
@@ -103,6 +107,7 @@ public final class UtilResources {
      * @param context To resolve resources
      * @return List of intervals in pointrules.xml as list of PointsIntervalCalulator
      */
+    @SuppressWarnings("ResourceType")
     public static List<PointsIntervalCalculator> getPointsCalculatorList(Context context) {
         List<PointsIntervalCalculator> array = new ArrayList<PointsIntervalCalculator>();
 
@@ -176,14 +181,29 @@ public final class UtilResources {
         for (PointsIntervalCalculator pointInterval:pointsInterval) {
             if (metric.getMilliSecs()>=pointInterval.getFromSeconds()*1000 &&
                     metric.getMilliSecs()<=pointInterval.getToSeconds()*1000 &&
-                    metric.getNumberOfShapes() >= pointInterval.getFromNumberOfShapes() &&
-                    metric.getNumberOfShapes() <= pointInterval.getToNumberOfShapes())
+                    metric.getShapesAnswer() >= pointInterval.getFromNumberOfShapes() &&
+                    metric.getShapesAnswer() < pointInterval.getToNumberOfShapes())
                     {
                         return pointInterval.getPoints();
 
             }
         }
         return 0;
+    }
+
+
+    /**
+     * Calculate text size in pixels given the size in dp
+     * @param dpSize Size in dp
+     * @param density Density of the device
+     * @return Size in pixels
+     */
+    public static int getRealSize(int dpSize, DisplayMetrics density) {
+
+        int pixel= (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dpSize, density);
+
+        return pixel;
     }
 
 

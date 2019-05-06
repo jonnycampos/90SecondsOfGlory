@@ -14,7 +14,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/Black">
+    android:background="@color/Black"
+    android:id="@+id/linear_layout_activity_game">
 
 
 
@@ -51,7 +52,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/ic_minibackground_si"
             android:backgroundTint="@color/White"
             android:scaleType="fitXY"
             app:positionHorizontal="t"
@@ -64,7 +64,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/ic_minibackground_sd"
             android:backgroundTint="@color/Aquamarine"
             android:scaleType="fitXY"
             app:positionHorizontal="t"
@@ -124,7 +123,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/ic_minibackground_ii"
             android:backgroundTint="@color/LawnGreen"
             android:scaleType="fitXY"
             app:positionHorizontal="b"
@@ -137,7 +135,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/ic_minibackground_id"
             android:backgroundTint="@color/Orange"
             android:scaleType="fitXY"
             app:positionHorizontal="b"

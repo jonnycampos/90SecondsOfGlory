@@ -17,6 +17,12 @@ public class FullGameState {
     public String province;
     public String date;
     public int position;
+    public String status;
+
+    public static String STATUS_PAUSED = "STATUS_PAUSED";
+    public static String STATUS_TIME_OVER = "STATUS_TIME_OVER";
+    public static String STATUS_GAME = "STATUS_GAME";
+
 
     private static final FullGameState ourInstance = new FullGameState();
 
@@ -29,14 +35,17 @@ public class FullGameState {
         points = 0;
     }
 
-    public void addMetric(GameMetric gameMetric) {
+    public synchronized void addMetric(GameMetric gameMetric) {
         gameMetricList.add(gameMetric);
     }
 
 
-    public void addPoints(int newPoints) {
+    public synchronized void addPoints(int newPoints) {
 
         points += newPoints;
+        if (points < 0) {
+            points = 0;
+        }
     }
 
     public int getPoints() {
@@ -69,5 +78,17 @@ public class FullGameState {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public boolean isPlayingGame() {
+        return getStatus().equals(FullGameState.STATUS_GAME);
     }
 }

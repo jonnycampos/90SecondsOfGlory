@@ -69,7 +69,6 @@ public class MiniGameButton {
         paint.setColor(getStrokeColor());
         canvas.drawRoundRect(rectangle, 15, 15, paint);
 
-        //paint.setShader(new LinearGradient(0, 0, 0, getHeight(), Color.BLUE, Color.WHITE, Shader.TileMode.MIRROR));
         paint.setStyle(getStyle());
         paint.setColor(getColor());
         canvas.drawRoundRect(rectangle, 15, 15, paint);

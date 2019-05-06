@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import apps.blessed.a90secondsofglory.FullGameState;
 import apps.blessed.a90secondsofglory.GameEventsListener;
 import apps.blessed.a90secondsofglory.R;
+import apps.blessed.a90secondsofglory.utils.UtilResources;
 
 /**
  * Created by jacam on 30/09/2018.
@@ -43,6 +44,8 @@ public class Counter extends View {
     private RectF mCircleInnerBounds;
     private long time;
     private GameEventsListener gameEventsListener;
+    private ValueAnimator mTimerAnimator;
+    private boolean timerCanceled = false;
 
     private static final float THICKNESS_SCALE = 0.01f;
 
@@ -106,28 +109,27 @@ public class Counter extends View {
         }
 
         //Draw points
-        //canvas.drawBitmap(mBitmap, 0, 0, null);
-        drawPaint.setTextSize(100);
+        drawPaint.setTextSize(UtilResources.getRealSize(25, getResources().getDisplayMetrics()));
         drawPaint.setStyle(Paint.Style.FILL);
         Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.oswald);
         drawPaint.setTypeface(typeface);
 
         int xPos = (canvas.getWidth() / 2);
-        int yPos = (int) ((canvas.getHeight() / 2) - ((drawPaint.descent() + drawPaint.ascent()) / 2)) ;
+        int yPos = (int) ((canvas.getHeight() / 2) - ((drawPaint.descent() + drawPaint.ascent()) / 2));
         drawPaint.setTextAlign(Paint.Align.CENTER);
         drawPaint.setColor(Color.WHITE);
-        canvas.drawText(String.valueOf(FullGameState.getInstance().getPoints()),xPos, yPos, drawPaint);
+        canvas.drawText(String.valueOf(FullGameState.getInstance().getPoints()), xPos, yPos, drawPaint);
 
         //Draw time
-        drawPaint.setTextSize(50);
+        drawPaint.setTextSize(UtilResources.getRealSize(15, getResources().getDisplayMetrics()));
         drawPaint.setColor(Color.YELLOW);
-        canvas.drawText(drawTime(time),xPos, yPos+80, drawPaint);
+        canvas.drawText(drawTime(time), xPos, yPos + UtilResources.getRealSize(30, getResources().getDisplayMetrics()), drawPaint);
     }
 
 
     private String drawTime(Long milliseconds) {
-        String seconds = String.format("%02d",milliseconds/1000);
-        String millis = String.format("%03d",milliseconds%1000).substring(0,2);
+        String seconds = String.format("%02d", milliseconds / 1000);
+        String millis = String.format("%03d", milliseconds % 1000).substring(0, 2);
         return seconds + ":" + millis;
     }
 
@@ -135,7 +137,7 @@ public class Counter extends View {
     public void start(int secs) {
 
 
-        ValueAnimator mTimerAnimator = ValueAnimator.ofFloat(0f, 1f);
+        mTimerAnimator = ValueAnimator.ofFloat(0f, 1f);
         mTimerAnimator.setDuration(TimeUnit.SECONDS.toMillis(secs));
         mTimerAnimator.setInterpolator(new LinearInterpolator());
         mTimerAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -144,12 +146,12 @@ public class Counter extends View {
                 drawProgress((float) animation.getAnimatedValue(), animation.getCurrentPlayTime());
             }
         });
-        mTimerAnimator.addListener(new AnimatorListenerAdapter()
-        {
+        mTimerAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
-            public void onAnimationEnd(Animator animation)
-            {
-                gameEventsListener.onTimeEnds();
+            public void onAnimationEnd(Animator animation) {
+                if (!timerCanceled) {
+                    gameEventsListener.onTimeEnds();
+                }
             }
         });
         mTimerAnimator.start();
@@ -160,7 +162,10 @@ public class Counter extends View {
         final float thickness = getWidth() * THICKNESS_SCALE;
         int height = getHeight() / 2;
         int width = getWidth() / 2;
-            mCircleOuterBounds = new RectF(width-200, height-200, width + 200, height + 200);
+        //Length calculation.
+        int circleLength = getHeight() / 5;
+        mCircleOuterBounds = new RectF(width - circleLength, height - circleLength,
+                                       width + circleLength, height + circleLength);
         mCircleInnerBounds = new RectF(
                 mCircleOuterBounds.left + thickness,
                 mCircleOuterBounds.top + thickness,
@@ -176,26 +181,9 @@ public class Counter extends View {
         invalidate();
     }
 
-//    public class TimeCountDownTimer extends CountDownTimer {
-//
-//        MiniGameView view;
-//
-//        public TimeCountDownTimer(long millisInFuture, long countDownInterval, MiniGameView view) {
-//            super(millisInFuture, countDownInterval);
-//            this.view = view;
-//        }
-//
-//        @Override
-//        public void onFinish() {
-//            state = STATE_GAME;
-//            view.setVisibility(View.GONE);
-//            view.invalidate();
-//            setupPaint();
-//            view.setVisibility(View.VISIBLE);
-//        }
-//
-//        @Override
-//        public void onTick(long millisUntilFinished) {
-//        }
-//    }
+    public void stopTimer() {
+        timerCanceled = true;
+        mTimerAnimator.cancel();
+    }
+
 }
