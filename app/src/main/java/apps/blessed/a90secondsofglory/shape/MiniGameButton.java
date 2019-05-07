@@ -1,9 +1,13 @@
 package apps.blessed.a90secondsofglory.shape;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+
+import apps.blessed.a90secondsofglory.R;
+import apps.blessed.a90secondsofglory.utils.UtilResources;
 
 /**
  * Created by jacam on 04/11/2018.
@@ -27,7 +31,6 @@ public class MiniGameButton {
     private int DEFAULT_COLOR = Color.RED;
     private Paint.Style DEFAULT_STYLE = Paint.Style.FILL;
     private int DEFAULT_STROKE = 10;
-    private int DEFAULT_TEXT_SIZE = 40;
     private int DEFAULT_TEXT_COLOR = Color.WHITE;
     private int DEFAULT_STROKE_COLOR = Color.WHITE;
 
@@ -36,17 +39,19 @@ public class MiniGameButton {
     private int color = DEFAULT_COLOR;
     private Paint.Style style = DEFAULT_STYLE;
     private int stroke = DEFAULT_STROKE;
-    private int textSize = DEFAULT_TEXT_SIZE;
     private int textColor = DEFAULT_TEXT_COLOR;
     private int strokeColor = DEFAULT_STROKE_COLOR;
 
-    public MiniGameButton(String text, int positionLeftButton, int positionTopButton, int positionRightButton, int positionBottomButton) {
-        this.text = text;
+    private Context context = null;
+
+    public MiniGameButton(Context context, String text, int positionLeftButton, int positionTopButton, int positionRightButton, int positionBottomButton) {
+        this.context = context;
         this.positionLeftButton = positionLeftButton;
         this.positionRightButton = positionRightButton;
         this.positionTopButton = positionTopButton;
         this.positionBottomButton = positionBottomButton;
         this.rectangle = new RectF(positionLeftButton, positionTopButton, positionRightButton, positionBottomButton);;
+        this.setText(text);
     }
 
 
@@ -64,6 +69,8 @@ public class MiniGameButton {
      */
     public void paintButton(Canvas canvas, Paint paint) {
 
+        Integer textSize = UtilResources.getRealSize(context.getResources().getInteger(R.integer.mg_buttonTextSize), context.getResources().getDisplayMetrics());
+
         paint.setStrokeWidth(getStroke());
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(getStrokeColor());
@@ -73,7 +80,7 @@ public class MiniGameButton {
         paint.setColor(getColor());
         canvas.drawRoundRect(rectangle, 15, 15, paint);
 
-        paint.setTextSize(getTextSize());
+        paint.setTextSize(textSize);
         paint.setTextAlign(Paint.Align.CENTER);
         int width = (int)rectangle.width();
         paint.setStyle(Paint.Style.FILL);
@@ -157,14 +164,6 @@ public class MiniGameButton {
 
     public void setStroke(int stroke) {
         this.stroke = stroke;
-    }
-
-    public int getTextSize() {
-        return textSize;
-    }
-
-    public void setTextSize(int textSize) {
-        this.textSize = textSize;
     }
 
     public int getTextColor() {

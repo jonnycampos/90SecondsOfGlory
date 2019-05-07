@@ -4,7 +4,11 @@
     <integer name="mg_titleVerticalRelativePosistion">35</integer>
     <integer name="mg_titleHorizontalRelativePosistion">25</integer>
 
-    <integer name="mg_sizeShape">20</integer>
+    <integer name="mg_sizeShape">18</integer>
     <integer name="mg_maxShapes">15</integer>
     <integer name="mg_minShapes">5</integer>
+
+    <integer name="mg_buttonTextSize">15</integer>
+    <integer name="mg_buttonsHorizontalRelativePosition">20</integer>
+    <integer name="mg_buttonsSeparation">5</integer>
 </resources>

@@ -337,27 +337,24 @@ public class MiniGameView extends AppCompatImageView {
         int positionBottomButton;
         int buttonLength;
         int buttonHeight;
-        int separation = 20;
+        int separation = UtilResources.getRealSize(getContext().getResources().getInteger(R.integer.mg_buttonsSeparation),getResources().getDisplayMetrics());
         ArrayList<MiniGameButton> buttonsList = new ArrayList<MiniGameButton>();
-
+        int relativePosition = UtilResources.getRealSize(getContext().getResources().getInteger(R.integer.mg_buttonsHorizontalRelativePosition),getResources().getDisplayMetrics());
 
         //Length of the button will be 1/5
         buttonLength = (getRightRelative() - getLeftRelative()) / 5;
         if (getPositionVertical().equals("l")) {
             //Starts at left
-            positionLeftButton = 50;
+            positionLeftButton = relativePosition;
             positionRightButton = positionLeftButton + buttonLength;
         } else {
             //Starts at 1/4, ends at right
-            positionLeftButton = ((getRightRelative() - getLeftRelative()) / 4) + 50;
+            positionLeftButton = ((getRightRelative() - getLeftRelative()) / 4) + relativePosition;
             positionRightButton = positionLeftButton + buttonLength;
         }
 
         //We calculate winner button and incorrect answers
         int winnerButtonIndex = new Random().nextInt(3);
-
-
-
 
         //Height of the button will be around 1/8
         buttonHeight = (getBottomRelative() - getTopRelative()) / 9;
@@ -368,7 +365,7 @@ public class MiniGameView extends AppCompatImageView {
 
         //Button 1
         String buttonText = buttonAnswer(0,winnerButtonIndex, correctAnswer, otherAnswer);
-        MiniGameButton button1 = new MiniGameButton(buttonText, positionLeftButton, positionTopButton, positionRightButton, positionBottomButton);
+        MiniGameButton button1 = new MiniGameButton(getContext(),buttonText, positionLeftButton, positionTopButton, positionRightButton, positionBottomButton);
         buttonsList.add(button1);
 
         //Button 2
@@ -378,7 +375,7 @@ public class MiniGameView extends AppCompatImageView {
         buttonText = buttonAnswer(1,winnerButtonIndex, correctAnswer, otherAnswer);
         positionLeftButton = positionLeftButton + separation + buttonLength;
         positionRightButton = positionRightButton + separation + buttonLength;
-        MiniGameButton button2 = new MiniGameButton(buttonText, positionLeftButton, positionTopButton, positionRightButton, positionBottomButton);
+        MiniGameButton button2 = new MiniGameButton(getContext(), buttonText, positionLeftButton, positionTopButton, positionRightButton, positionBottomButton);
         buttonsList.add(button2);
 
         //Button 3
@@ -388,7 +385,7 @@ public class MiniGameView extends AppCompatImageView {
         buttonText = buttonAnswer(2,winnerButtonIndex, correctAnswer, otherAnswer);
         positionLeftButton = positionLeftButton + separation + buttonLength;
         positionRightButton = positionRightButton + separation + buttonLength;
-        MiniGameButton button3 = new MiniGameButton(buttonText, positionLeftButton, positionTopButton, positionRightButton, positionBottomButton);
+        MiniGameButton button3 = new MiniGameButton(getContext(), buttonText, positionLeftButton, positionTopButton, positionRightButton, positionBottomButton);
         buttonsList.add(button3);
 
         return buttonsList;
@@ -468,7 +465,7 @@ public class MiniGameView extends AppCompatImageView {
         int maxShapes = getContext().getResources().getInteger(R.integer.mg_maxShapes);
         int minShapes = getContext().getResources().getInteger(R.integer.mg_minShapes);
 
-        int numShapes = new Random().nextInt(maxShapes - minShapes) + maxShapes;
+        int numShapes = new Random().nextInt(maxShapes - minShapes) + minShapes;
         int i = 0;
         while (i < numShapes) {
             //Where the shape will be located
