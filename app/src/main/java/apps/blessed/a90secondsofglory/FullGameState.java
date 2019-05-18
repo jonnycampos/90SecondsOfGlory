@@ -48,12 +48,30 @@ public class FullGameState {
         }
     }
 
+    public static void clean() {
+        getInstance().setPoints(0);
+        getInstance().setGameMetricList(new ArrayList<GameMetric>());
+        getInstance().setProvince(null);
+        getInstance().setName(null);
+        getInstance().setPosition(0);
+    }
+
+
     public int getPoints() {
         return points;
     }
 
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+
     public List<GameMetric> getGameMetricList() {
         return gameMetricList;
+    }
+
+    public void setGameMetricList(List<GameMetric> gameMetricList) {
+        this.gameMetricList = gameMetricList;
     }
 
     public String getName() {
@@ -91,4 +109,5 @@ public class FullGameState {
     public boolean isPlayingGame() {
         return getStatus().equals(FullGameState.STATUS_GAME);
     }
+
 }

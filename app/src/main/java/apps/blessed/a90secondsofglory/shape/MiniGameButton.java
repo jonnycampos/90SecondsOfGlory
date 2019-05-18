@@ -30,7 +30,6 @@ public class MiniGameButton {
     //Default values if no provided
     private int DEFAULT_COLOR = Color.RED;
     private Paint.Style DEFAULT_STYLE = Paint.Style.FILL;
-    private int DEFAULT_STROKE = 10;
     private int DEFAULT_TEXT_COLOR = Color.WHITE;
     private int DEFAULT_STROKE_COLOR = Color.WHITE;
 
@@ -38,7 +37,6 @@ public class MiniGameButton {
     //Some values to draw the button
     private int color = DEFAULT_COLOR;
     private Paint.Style style = DEFAULT_STYLE;
-    private int stroke = DEFAULT_STROKE;
     private int textColor = DEFAULT_TEXT_COLOR;
     private int strokeColor = DEFAULT_STROKE_COLOR;
 
@@ -70,15 +68,17 @@ public class MiniGameButton {
     public void paintButton(Canvas canvas, Paint paint) {
 
         Integer textSize = UtilResources.getRealSize(context.getResources().getInteger(R.integer.mg_buttonTextSize), context.getResources().getDisplayMetrics());
+        Integer stroke = UtilResources.getRealSize(context.getResources().getInteger(R.integer.mg_buttonStroke), context.getResources().getDisplayMetrics());
 
-        paint.setStrokeWidth(getStroke());
+
+        paint.setStrokeWidth(stroke);
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(getStrokeColor());
-        canvas.drawRoundRect(rectangle, 15, 15, paint);
+        canvas.drawRoundRect(rectangle, 10, 10, paint);
 
         paint.setStyle(getStyle());
         paint.setColor(getColor());
-        canvas.drawRoundRect(rectangle, 15, 15, paint);
+        canvas.drawRoundRect(rectangle, 10, 10, paint);
 
         paint.setTextSize(textSize);
         paint.setTextAlign(Paint.Align.CENTER);
@@ -87,7 +87,8 @@ public class MiniGameButton {
         paint.setColor(getTextColor());
         int numOfChars = paint.breakText(getText(),true,width,null);
         int start = (getText().length()-numOfChars)/2;
-        canvas.drawText(getText(),start,start+numOfChars,rectangle.centerX(),rectangle.centerY()+10,paint);
+        Integer textVerticalPadding = UtilResources.getRealSize(context.getResources().getInteger(R.integer.mg_buttonTextPaddingVertical), context.getResources().getDisplayMetrics());
+        canvas.drawText(getText(),start,start+numOfChars,rectangle.centerX(),rectangle.centerY()+textVerticalPadding,paint);
 
     }
     
@@ -156,14 +157,6 @@ public class MiniGameButton {
 
     public void setStyle(Paint.Style style) {
         this.style = style;
-    }
-
-    public int getStroke() {
-        return stroke;
-    }
-
-    public void setStroke(int stroke) {
-        this.stroke = stroke;
     }
 
     public int getTextColor() {

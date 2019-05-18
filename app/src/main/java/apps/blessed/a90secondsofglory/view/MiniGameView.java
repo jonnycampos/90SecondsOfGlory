@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
+import android.renderscript.Float2;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.content.res.AppCompatResources;
@@ -276,7 +277,7 @@ public class MiniGameView extends AppCompatImageView {
         Random randomFigure = new Random();
         shapeQuestion = shapeList.get((randomFigure.nextInt(shapeList.size())));
         boolean questionWithColor  = new Random().nextBoolean();
-        question = shapeQuestion.getName() + "s";
+        question = shapeQuestion.getName();
         if (questionWithColor) {
             colorQuestion = colorList.get((randomFigure.nextInt(colorList.size())));
             question = question + " color " + colorQuestion.getName();
@@ -298,28 +299,36 @@ public class MiniGameView extends AppCompatImageView {
         int right;
         int top;
         int bottom;
+        int relativeWidthBar = getContext().getResources().getInteger(R.integer.mg_progressBarRelativeWidth);
+        int relativeHorizontalPosition = getContext().getResources().getInteger(R.integer.mg_progressBarRelativeHorizontalPosition);
+        int relativeVerticalPosition1 = getContext().getResources().getInteger(R.integer.mg_progressBarRelativeVerticalPosition1);
+        int relativeVerticalPosition2 = getContext().getResources().getInteger(R.integer.mg_progressBarRelativeVerticalPosition2);
+        int duration = getContext().getResources().getInteger(R.integer.mg_progressBarDuration);
+
+
+        int widthBar = (getRightRelative() - getLeftRelative()) / relativeWidthBar;
 
         if (getPositionVertical().equals("l")) {
-            left = (((getRightRelative() - getLeftRelative()) / 4) * 3) + 100;
-            right = (getRightRelative() - getLeftRelative()) - 100;
+            left = (getRightRelative() - getLeftRelative()) - ((getRightRelative() - getLeftRelative()) / relativeHorizontalPosition) ;
+            right = left + widthBar;
         } else {
-            left = 100;
-            right = ((getRightRelative() - getLeftRelative()) / 4) - 100;
+            left = ((getRightRelative() - getLeftRelative()) / relativeHorizontalPosition) - widthBar;
+            right = left + widthBar;
         }
 
         if (getPositionHorizontal().equals("t")) {
-            top = 70;
-            bottom = ((getBottomRelative() - getTopRelative()) / 2) - 50;
+            top = (getBottomRelative() - getTopRelative()) / relativeVerticalPosition1;
+            bottom = ((getBottomRelative() - getTopRelative()) / 2) - ((getBottomRelative() - getTopRelative()) / relativeVerticalPosition2);
         } else {
-            top = ((getBottomRelative() - getTopRelative()) / 2) + 20;
-            bottom = (getBottomRelative() - getTopRelative()) - 100;
+            top = ((getBottomRelative() - getTopRelative()) / 2) + ((getBottomRelative() - getTopRelative()) / relativeVerticalPosition2);
+            bottom = (getBottomRelative() - getTopRelative()) - ((getBottomRelative() - getTopRelative()) / relativeVerticalPosition1);
         }
 
         MiniGameProgressBar progressBar = new MiniGameProgressBar(left,right,top,bottom);
-
+        this.setProgressBar(progressBar);
 
         MiniGameViewAnimation animation = new MiniGameViewAnimation(this, progressBar.getTop());
-        animation.setDuration(8500);
+        animation.setDuration(duration);
         this.startAnimation(animation);
         return progressBar;
     }
@@ -335,29 +344,31 @@ public class MiniGameView extends AppCompatImageView {
         int positionRightButton;
         int positionTopButton;
         int positionBottomButton;
-        int buttonLength;
-        int buttonHeight;
-        int separation = UtilResources.getRealSize(getContext().getResources().getInteger(R.integer.mg_buttonsSeparation),getResources().getDisplayMetrics());
-        ArrayList<MiniGameButton> buttonsList = new ArrayList<MiniGameButton>();
-        int relativePosition = UtilResources.getRealSize(getContext().getResources().getInteger(R.integer.mg_buttonsHorizontalRelativePosition),getResources().getDisplayMetrics());
 
-        //Length of the button will be 1/5
-        buttonLength = (getRightRelative() - getLeftRelative()) / 5;
+
+        ArrayList<MiniGameButton> buttonsList = new ArrayList<MiniGameButton>();
+
+        int relativeButtonHeight = getContext().getResources().getInteger(R.integer.mg_buttonHeightRelative);
+        int relativeHorizontalPosition = getContext().getResources().getInteger(R.integer.mg_buttonsHorizontalRelativePosition);
+
+        int buttonLength = (int)Math.round((getRightRelative() - getLeftRelative()) / 5.5);
+        int separation = buttonLength / getContext().getResources().getInteger(R.integer.mg_buttonsSeparationRelative);
+        int position = (getRightRelative() - getLeftRelative()) / relativeHorizontalPosition;;
         if (getPositionVertical().equals("l")) {
             //Starts at left
-            positionLeftButton = relativePosition;
+            positionLeftButton = position;
             positionRightButton = positionLeftButton + buttonLength;
         } else {
             //Starts at 1/4, ends at right
-            positionLeftButton = ((getRightRelative() - getLeftRelative()) / 4) + relativePosition;
+            positionLeftButton = ((getRightRelative() - getLeftRelative()) / 4) + position;
             positionRightButton = positionLeftButton + buttonLength;
         }
 
         //We calculate winner button and incorrect answers
         int winnerButtonIndex = new Random().nextInt(3);
 
-        //Height of the button will be around 1/8
-        buttonHeight = (getBottomRelative() - getTopRelative()) / 9;
+        //Height of the button will be around 1/9
+        int buttonHeight = (getBottomRelative() - getTopRelative()) / relativeButtonHeight ;
         positionTopButton = ((getBottomRelative() - getTopRelative()) * 3) / 4;
         positionBottomButton = positionTopButton + buttonHeight;
 
@@ -373,6 +384,9 @@ public class MiniGameView extends AppCompatImageView {
             otherAnswer = Integer.parseInt(button1.getText());
         }
         buttonText = buttonAnswer(1,winnerButtonIndex, correctAnswer, otherAnswer);
+        if (Integer.parseInt(buttonText) != correctAnswer) {
+            otherAnswer = Integer.parseInt(buttonText);
+        }
         positionLeftButton = positionLeftButton + separation + buttonLength;
         positionRightButton = positionRightButton + separation + buttonLength;
         MiniGameButton button2 = new MiniGameButton(getContext(), buttonText, positionLeftButton, positionTopButton, positionRightButton, positionBottomButton);
@@ -418,6 +432,7 @@ public class MiniGameView extends AppCompatImageView {
             else
                 return String.valueOf(correctAnswer - 1);
         }
+
 
 
         //Last button calculation
@@ -553,7 +568,9 @@ public class MiniGameView extends AppCompatImageView {
         } else {
             drawPaint.setColor(Color.RED);
         }
-        drawPaint.setTextSize(300);
+
+
+        drawPaint.setTextSize(getContext().getResources().getInteger(R.integer.mg_pointsTextSize));
         drawPaint.setStyle(Paint.Style.FILL);
         Typeface typeface = ResourcesCompat.getFont(getContext().getApplicationContext(), R.font.oswald);
         drawPaint.setTypeface(typeface);
@@ -562,8 +579,6 @@ public class MiniGameView extends AppCompatImageView {
         int yPos = (int) ((canvas.getHeight() / 2) - ((drawPaint.descent() + drawPaint.ascent()) / 2)) ;
         drawPaint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText(String.valueOf(metric.getPoints()), xPos, yPos, drawPaint);
-
-
     }
 
 
@@ -623,13 +638,12 @@ public class MiniGameView extends AppCompatImageView {
         Integer horizontalSeparation = getContext().getResources().getInteger(R.integer.mg_titleHorizontalRelativePosistion);
         if (getPositionVertical().equals("l")) {
             drawPaint.setTextAlign(Paint.Align.LEFT);
-            canvas.drawText(question,getLeftRelative() +
-                    UtilResources.getRealSize(horizontalSeparation,getResources().getDisplayMetrics()),
-                    getTopRelative() + UtilResources.getRealSize(verticalSeparation,getResources().getDisplayMetrics()),drawPaint);
+            canvas.drawText(question,getLeftRelative() + getRightRelative()/verticalSeparation,
+                    getTopRelative() + getBottomRelative()/horizontalSeparation,drawPaint);
         } else {
             drawPaint.setTextAlign(Paint.Align.RIGHT);
-            canvas.drawText(question,getRightRelative() - UtilResources.getRealSize(horizontalSeparation,getResources().getDisplayMetrics()),
-                    getTopRelative() + UtilResources.getRealSize(verticalSeparation,getResources().getDisplayMetrics()),drawPaint);
+            canvas.drawText(question,getRightRelative() - getRightRelative()/verticalSeparation,
+                    getTopRelative() + getBottomRelative()/horizontalSeparation,drawPaint);
         }
     }
 

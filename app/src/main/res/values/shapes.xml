@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="shape_1">
-        <item>cara</item>
+        <item>caras</item>
         <item>ic_face</item>
     </array>
     <array name="shape_2">
-        <item>dado</item>
+        <item>dados</item>
         <item>ic_dice</item>
+    </array>
+    <array name="shape_3">
+        <item>aviones</item>
+        <item>ic_airplane</item>
+    </array>
+    <array name="shape_4">
+        <item>estrellas</item>
+        <item>ic_star</item>
     </array>
 </resources>

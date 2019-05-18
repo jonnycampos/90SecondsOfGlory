@@ -22,8 +22,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
@@ -80,6 +79,7 @@ public class MenuActivity extends AppCompatActivity {
                     public void onAnimationEnd(Animation anim)
                     {
                         button.setAlpha(1);
+
                     };
                 });
 

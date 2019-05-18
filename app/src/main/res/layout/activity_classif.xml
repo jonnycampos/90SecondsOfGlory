@@ -33,8 +33,23 @@
         android:paddingBottom="5dp"
         />
 
+
+        <RelativeLayout
+            android:id="@+id/classif_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" >
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true" />
+        </RelativeLayout>
+
+
+
     <Button
-        android:id="@+id/button_result"
+        android:id="@+id/classif_button"
         android:text="Jugar Otra Vez"
         android:textColor="#000000"
         android:textSize="20sp"

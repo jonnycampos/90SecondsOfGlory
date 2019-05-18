@@ -200,7 +200,9 @@ public class ResultActivity extends Activity {
         Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
         try {
             List<Address> address = geoCoder.getFromLocation(lat, lng, 1);
-            city= address.get(0).getSubAdminArea();
+            if (address.size() > 0) {
+                city = address.get(0).getSubAdminArea();
+            }
         } catch (IOException e) {
             // Handle IOException
         } catch (NullPointerException e) {

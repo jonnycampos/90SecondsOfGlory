@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="mg_titleSize">20</integer>
-    <integer name="mg_titleVerticalRelativePosistion">35</integer>
-    <integer name="mg_titleHorizontalRelativePosistion">25</integer>
+    <integer name="mg_titleVerticalRelativePosistion">16</integer>
+    <integer name="mg_titleHorizontalRelativePosistion">7</integer>
 
     <integer name="mg_sizeShape">18</integer>
     <integer name="mg_maxShapes">15</integer>
     <integer name="mg_minShapes">5</integer>
 
     <integer name="mg_buttonTextSize">15</integer>
-    <integer name="mg_buttonsHorizontalRelativePosition">20</integer>
-    <integer name="mg_buttonsSeparation">5</integer>
+    <integer name="mg_buttonsHorizontalRelativePosition">16</integer>
+    <integer name="mg_buttonsSeparationRelative">6</integer>
+    <integer name="mg_buttonHeightRelative">9</integer>
+    <integer name="mg_buttonTextPaddingVertical">5</integer>
+    <integer name="mg_buttonStroke">5</integer>
+
+    <integer name="mg_progressBarRelativeWidth">25</integer>
+    <integer name="mg_progressBarRelativeHorizontalPosition">8</integer>
+    <integer name="mg_progressBarRelativeVerticalPosition1">6</integer>
+    <integer name="mg_progressBarRelativeVerticalPosition2">15</integer>
+    <integer name="mg_progressBarDuration">8500</integer>
+
+    <integer name="mg_pointsTextSize">150</integer>
+
 </resources>

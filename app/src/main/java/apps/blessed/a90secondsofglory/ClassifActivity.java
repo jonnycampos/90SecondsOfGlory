@@ -1,11 +1,13 @@
 package apps.blessed.a90secondsofglory;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -50,10 +52,15 @@ public class ClassifActivity extends Activity {
         listView = findViewById(R.id.classif_list);
         getTopPlayers(province);
 
+        //Button to play again
+        Button button = findViewById(R.id.classif_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent myIntent = new Intent(ClassifActivity.this, GameActivity.class);
+                ClassifActivity.this.startActivity(myIntent);
 
-
-
-
+            }
+        });
     }
 
 
@@ -95,6 +102,7 @@ public class ClassifActivity extends Activity {
 
             @Override
             protected void onPostExecute(ResponseMetricsByProvince result) {
+                findViewById(R.id.classif_loading).setVisibility(View.GONE);
                 if (result == null) {
                     return;
                 } else {

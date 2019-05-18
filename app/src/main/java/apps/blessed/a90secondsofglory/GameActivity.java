@@ -32,6 +32,7 @@ public class GameActivity extends Activity implements GameEventsListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FullGameState.clean();
         FullGameState.getInstance().setStatus(FullGameState.STATUS_GAME);
         setContentView(R.layout.activity_game);
 
