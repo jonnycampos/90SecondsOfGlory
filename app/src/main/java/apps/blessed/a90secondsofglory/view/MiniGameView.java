@@ -83,6 +83,10 @@ public class MiniGameView extends AppCompatImageView {
     //Progress bar is a drawable
     private MiniGameProgressBar progressBar;
 
+    //Reset Button
+    Drawable resetButton;
+    Boolean miniGameReseted = false;
+
     //Question of the game
     private String question;
     private ShapeGame shapeQuestion;
@@ -93,6 +97,9 @@ public class MiniGameView extends AppCompatImageView {
 
     //Local timer
     MiniGameCountDownTimer timer;
+
+    //Progress Bar Animation
+    MiniGameViewAnimation animation;
 
     //Metrics to return at the end of the minigame
     GameMetric metric;
@@ -244,6 +251,9 @@ public class MiniGameView extends AppCompatImageView {
         //Create the progress bar
         progressBar = createProgressBar();
 
+        //ResetButton
+        resetButton = createResetButton();
+
         //Start timer
         if (FullGameState.getInstance().isPlayingGame()) {
             timer = new MiniGameCountDownTimer(8500, 1, this, getContext());
@@ -251,6 +261,49 @@ public class MiniGameView extends AppCompatImageView {
         }
 
 
+    }
+
+
+    /**
+     * Creates the drawable to reset the chrono
+     * @return Drawable with the vector
+     */
+    private Drawable createResetButton() {
+        Drawable d = AppCompatResources.getDrawable(getContext().getApplicationContext(), R.drawable.ic_reset).mutate();
+        if (miniGameReseted) {
+            DrawableCompat.setTint(d, getResources().getColor(R.color.Gray));
+        } else {
+            DrawableCompat.setTint(d, getResources().getColor(R.color.Ivory));
+        }
+
+        int sizeButton = UtilResources.getRealSize(getContext().getResources().getInteger(R.integer.mg_resetButtonSize),getResources().getDisplayMetrics());
+        int relativeHorizontalPosition = getContext().getResources().getInteger(R.integer.mg_resetButtonRelativeHorizontalPosition);
+        int relativeVerticalPosition1 = getContext().getResources().getInteger(R.integer.mg_resetButtonRelativeVerticalPosition1);
+        int relativeVerticalPosition2 = getContext().getResources().getInteger(R.integer.mg_resetButtonRelativeVerticalPosition2);
+
+        int left;
+        int right;
+        int top;
+        int bottom;
+        if (getPositionVertical().equals("l")) {
+            left = (getRightRelative() - getLeftRelative()) - ((getRightRelative() - getLeftRelative()) / relativeHorizontalPosition) ;
+            right = left + sizeButton;
+        } else {
+            left = ((getRightRelative() - getLeftRelative()) / relativeHorizontalPosition) - sizeButton;
+            right = left + sizeButton;
+        }
+
+        if (getPositionHorizontal().equals("t")) {
+            top = (getBottomRelative() - getTopRelative()) / relativeVerticalPosition1;
+            bottom = top + sizeButton;
+        } else {
+            top = ((getBottomRelative() - getTopRelative()) / 2) + (((getBottomRelative() - getTopRelative())/2) / relativeVerticalPosition2);
+            bottom = top + sizeButton;
+        }
+
+        d.setBounds( left, top, right, bottom);
+
+        return d;
     }
 
     public void addMillisec() {
@@ -327,7 +380,7 @@ public class MiniGameView extends AppCompatImageView {
         MiniGameProgressBar progressBar = new MiniGameProgressBar(left,right,top,bottom);
         this.setProgressBar(progressBar);
 
-        MiniGameViewAnimation animation = new MiniGameViewAnimation(this, progressBar.getTop());
+        animation = new MiniGameViewAnimation(this, progressBar.getTop());
         animation.setDuration(duration);
         this.startAnimation(animation);
         return progressBar;
@@ -491,7 +544,7 @@ public class MiniGameView extends AppCompatImageView {
             if (!shapeOverlapped(x,y,list,sizeShape)) {
                 int shapeIndex = randomShape.nextInt(shapeList.size());
                 ShapeGame shape = shapeList.get(shapeIndex);
-                Drawable d = AppCompatResources.getDrawable(getContext().getApplicationContext(), shape.getResource());
+                Drawable d = AppCompatResources.getDrawable(getContext().getApplicationContext(), shape.getResource()).mutate();
                 int colorIndex = randomColor.nextInt(colorList.size());
                 ColorGame color = colorList.get(colorIndex);
                 DrawableCompat.setTint(d, color.getColorCode());
@@ -554,12 +607,20 @@ public class MiniGameView extends AppCompatImageView {
 
             //Progress bar
             drawProgressBar(canvas);
+
+            //Reset button
+            drawReset(canvas);
         }
 
         //State 2 - Draw the points
        if (state.equals(STATE_SHOW_POINTS)) {
            drawPoints(canvas);
        }
+    }
+
+    private void drawReset(Canvas canvas) {
+        resetButton.draw(canvas);
+
     }
 
     private void drawPoints(Canvas canvas) {
@@ -663,9 +724,8 @@ public class MiniGameView extends AppCompatImageView {
             switch (eventAction) {
 
                 case MotionEvent.ACTION_DOWN:
-                    metric.setAnswered(true);
-                    metric.setMilliSecs(millisecs);
-                    //Pressed button 1
+
+                    //Pressed one button with answer
                     if (buttons.get(0).getRectangle().contains(x, y)) {
                         pressedButton = 0;
                     } else if (buttons.get(1).getRectangle().contains(x, y)) {
@@ -674,6 +734,8 @@ public class MiniGameView extends AppCompatImageView {
                         pressedButton = 2;
                     }
                     if (pressedButton != -1) {
+                        metric.setAnswered(true);
+                        metric.setMilliSecs(millisecs);
                         //Check the correct answer
                         if (Integer.parseInt(buttons.get(pressedButton).getText()) == correctAnswer) {
                             //If correct: Calculate points.Add points
@@ -687,7 +749,17 @@ public class MiniGameView extends AppCompatImageView {
                             MediaPlayerUtils.playSound(getContext().getApplicationContext(), R.raw.wrong);
                             this.restartView();
                         }
-                        //End instance and create a new one
+                    } else if (!miniGameReseted && resetButton.getBounds().contains(x,y)) {
+                        //Press reset button. Let's restart the local time
+                        timer.cancel();
+                        timer.start();
+                        //Let's reset the progress bar
+                        this.clearAnimation();
+                        this.startAnimation(animation);
+                        animation.reset();
+                        //Disable button state and change color
+                        DrawableCompat.setTint(resetButton, getResources().getColor(R.color.Gray));
+                        miniGameReseted = true;
                     }
                     break;
             }
@@ -747,7 +819,6 @@ public class MiniGameView extends AppCompatImageView {
             }
         });
 
-        //this.startAnimation(explodeAnimation);
         switchToShowPointsState();
 
     }

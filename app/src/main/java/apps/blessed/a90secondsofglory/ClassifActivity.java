@@ -2,6 +2,7 @@ package apps.blessed.a90secondsofglory;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +44,7 @@ public class ClassifActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classif);
 
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         //Province to list
         TextView textViewPoints = findViewById(R.id.classif_province);
         String province = String.valueOf(FullGameState.getInstance().getProvince());

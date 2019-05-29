@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 
 import apps.blessed.a90secondsofglory.App;
 import apps.blessed.a90secondsofglory.R;
+import apps.blessed.a90secondsofglory.animation.MiniGameViewAnimation;
 
 /**
  * Created by jacam on 04/11/2018.
@@ -22,6 +23,9 @@ public class MiniGameProgressBar {
     // Shape where to draw the bar
     private Drawable shape;
     private int shapeResource = R.drawable.ic_mini_game_progressbar;
+
+    //Animation of the progress bar
+    MiniGameViewAnimation animation;
 
 
 
@@ -40,6 +44,17 @@ public class MiniGameProgressBar {
         shape.setBounds(left, top, right, bottom);
         shape.draw(canvas);
     }
+
+
+    public void start() {
+        animation.start();
+    }
+
+    public void reset() {
+        animation.cancel();
+        animation.start();
+    }
+
 
     public int getLeft() {
         return left;
@@ -73,19 +88,14 @@ public class MiniGameProgressBar {
         this.bottom = bottom;
     }
 
-    public Drawable getShape() {
-        return shape;
+
+    public MiniGameViewAnimation getAnimation() {
+        return animation;
     }
 
-    public void setShape(Drawable shape) {
-        this.shape = shape;
+    public void setAnimation(MiniGameViewAnimation animation) {
+        this.animation = animation;
     }
 
-    public int getShapeResource() {
-        return shapeResource;
-    }
 
-    public void setShapeResource(int shapeResource) {
-        this.shapeResource = shapeResource;
-    }
 }

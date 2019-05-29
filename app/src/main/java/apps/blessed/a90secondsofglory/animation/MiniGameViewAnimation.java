@@ -21,8 +21,11 @@ public class MiniGameViewAnimation extends Animation {
 
     private int countSpeed = 8500;
 
+    private int initialTop;
+
     public MiniGameViewAnimation(MiniGameView view, int newTop) {
         this.newTopProgressBar = newTop;
+        this.initialTop = newTop;
         this.view = view;
     }
 
@@ -48,5 +51,12 @@ public class MiniGameViewAnimation extends Animation {
            }
            countSpeed = countSpeed - 1;
         }
+    }
+
+    public void reset() {
+        this.newTopProgressBar = this.initialTop;
+        view.getProgressBar().setTop(newTopProgressBar);
+        view.requestLayout();
+        countSpeed = 8500;
     }
 }

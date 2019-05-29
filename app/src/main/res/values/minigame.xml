@@ -23,4 +23,9 @@
 
     <integer name="mg_pointsTextSize">150</integer>
 
+    <integer name="mg_resetButtonSize">30</integer>
+    <integer name="mg_resetButtonRelativeHorizontalPosition">4</integer>
+    <integer name="mg_resetButtonRelativeVerticalPosition1">10</integer>
+    <integer name="mg_resetButtonRelativeVerticalPosition2">3</integer>
+
 </resources>
